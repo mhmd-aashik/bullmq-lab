@@ -10,27 +10,21 @@ export class AppService {
   ) {}
 
   async createReport() {
-    const jobs = await this.reportQueue.addBulk([
+    const job = await this.reportQueue.add(
+      'generate-report',
       {
-        name: 'generate-report',
-        data: { reportId: 'free-report' },
-        opts: { priority: 10 },
+        reportId: 'delayed-report-123',
+        format: 'pdf',
       },
       {
-        name: 'generate-report',
-        data: { reportId: 'business-report' },
-        opts: { priority: 5 },
+        delay: 30000, // 30 seconds
       },
-      {
-        name: 'generate-report',
-        data: { reportId: 'vip-report' },
-        opts: { priority: 1 },
-      },
-    ]);
+    );
 
-    return jobs.map((job) => ({
+    return {
       jobId: job.id,
-      reportId: job.data.reportId,
-    }));
+      message: 'Report scheduled',
+      delay: '30 seconds',
+    };
   }
 }
