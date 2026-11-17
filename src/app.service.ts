@@ -17,9 +17,9 @@ export class AppService {
         format: 'pdf',
       },
       {
-        attempts: 3,
+        attempts: 4,
         backoff: {
-          type: 'fixed',
+          type: 'exponential',
           delay: 2000,
         },
       },
