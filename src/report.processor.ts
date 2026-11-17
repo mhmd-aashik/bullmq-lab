@@ -37,12 +37,11 @@ import { Job } from 'bullmq';
 // }
 
 @Processor('report-queue', {
-  concurrency: 5,
+  concurrency: 1,
 })
 export class ReportProcessor extends WorkerHost {
   async process(job: Job): Promise<void> {
-    console.log(`START Job ${job.id}`, new Date().toISOString());
-
+    console.log(`START ${job.data.reportId}`);
     await new Promise((resolve) => setTimeout(resolve, 5000));
 
     console.log(`DONE Job ${job.id}`, new Date().toISOString());
