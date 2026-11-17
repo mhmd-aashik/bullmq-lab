@@ -1,9 +1,17 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
+import { BullModule } from '@nestjs/bullmq';
 
 @Module({
-  imports: [],
+  imports: [
+    BullModule.forRoot({
+      connection:{
+        host: 'localhost',
+        port: 6379
+      }
+    })
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
