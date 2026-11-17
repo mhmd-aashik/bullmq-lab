@@ -5,6 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Queue } from 'bullmq';
+import * as crypto from 'node:crypto';
 
 @Injectable()
 export class AppService {
@@ -14,26 +15,17 @@ export class AppService {
   ) {}
 
   async createReport() {
-    const reportId = 'report-123';
+    const reportId = `report-${crypto.randomUUID()}`;
 
     const job = await this.reportQueue.add(
       'generate-report',
-      {
-        reportId,
-        format: 'pdf',
-      },
-      // {
-      //   delay: 30000, // 30 seconds
-      // },
-      {
-        jobId: reportId,
-      },
+      { reportId, format: 'pdf' },
+      { jobId: reportId },
     );
 
     return {
       jobId: job.id,
-      reportId,
-      message: 'Report request accepted',
+      message: 'Report queued',
     };
   }
 
