@@ -14,21 +14,26 @@ export class AppService {
   ) {}
 
   async createReport() {
+    const reportId = 'report-123';
+
     const job = await this.reportQueue.add(
       'generate-report',
       {
-        reportId: 'delayed-report-123',
+        reportId,
         format: 'pdf',
       },
+      // {
+      //   delay: 30000, // 30 seconds
+      // },
       {
-        delay: 30000, // 30 seconds
+        jobId: reportId,
       },
     );
 
     return {
       jobId: job.id,
-      message: 'Report scheduled',
-      delay: '30 seconds',
+      reportId,
+      message: 'Report request accepted',
     };
   }
 
