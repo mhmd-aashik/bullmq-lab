@@ -19,3 +19,11 @@ export class ReportProcessor extends WorkerHost {
     };
   }
 }
+
+// async process(job: Job): Promise<any> {
+//  console.log(
+//    `Processing job ${job.id}, attempt ${job.attemptsMade + 1}`,
+//  );
+
+//  throw new Error('PDF service unavailable');
+// }

@@ -10,10 +10,20 @@ export class AppService {
   ) {}
 
   async createReport() {
-    const job = await this.reportQueue.add('generate-report', {
-      reportId: 'report-123',
-      format: 'pdf',
-    });
+    const job = await this.reportQueue.add(
+      'generate-report',
+      {
+        reportId: 'report-123',
+        format: 'pdf',
+      },
+      {
+        attempts: 3,
+        backoff: {
+          type: 'fixed',
+          delay: 2000,
+        },
+      },
+    );
 
     return {
       message: 'Report job added',
