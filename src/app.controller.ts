@@ -14,4 +14,9 @@ export class AppController {
   getJobStatus(@Param('id') id: string) {
     return this.appService.getJobStatus(id);
   }
+
+  @Post('reports/jobs/:id/retry')
+  retryJob(@Param('id') id: string) {
+    return this.appService.retryJob(id);
+  }
 }

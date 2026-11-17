@@ -1,5 +1,9 @@
 import { InjectQueue } from '@nestjs/bullmq';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Queue } from 'bullmq';
 
 @Injectable()
@@ -45,6 +49,27 @@ export class AppService {
       attemptsMade: job.attemptsMade,
       result: state === 'completed' ? job.returnvalue : null,
       failedReason: state === 'failed' ? job.failedReason : null,
+    };
+  }
+
+  async retryJob(jobId: string) {
+    const job = await this.reportQueue.getJob(jobId);
+
+    if (!job) {
+      throw new NotFoundException(`Job ${jobId} not found`);
+    }
+
+    const state = await job.getState();
+
+    if (state !== 'failed') {
+      throw new BadRequestException(`Job ${jobId} is ${state}, not failed`);
+    }
+
+    await job.retry();
+
+    return {
+      jobId: job.id,
+      message: 'Job submitted for retry',
     };
   }
 }
