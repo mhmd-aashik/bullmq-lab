@@ -1,4 +1,4 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller, Get, Param, Post } from '@nestjs/common';
 import { AppService } from './app.service.js';
 
 @Controller()
@@ -8,5 +8,10 @@ export class AppController {
   @Post('reports')
   createReport() {
     return this.appService.createReport();
+  }
+
+  @Get('reports/jobs/:id')
+  getJobStatus(@Param('id') id: string) {
+    return this.appService.getJobStatus(id);
   }
 }
