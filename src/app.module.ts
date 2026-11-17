@@ -10,7 +10,10 @@ import { BullModule } from '@nestjs/bullmq';
         host: 'localhost',
         port: 6379
       }
-    })
+    }),
+    BullModule.registerQueue({
+      name: 'report-queue',
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
